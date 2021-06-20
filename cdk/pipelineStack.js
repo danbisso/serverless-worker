@@ -23,11 +23,9 @@ class PipelineStack extends cdk.Stack {
         repo: 'serverless-worker',
         trigger: cpactions.GitHubTrigger.POLL
       }),
-      synthAction: new pipelines.SimpleSynthAction({
+      synthAction: pipelines.SimpleSynthAction.standardNpmSynth({
         sourceArtifact: sourceArtifact,
-        cloudAssemblyArtifact: cloudAssemblyArtifact,
-        installCommands: ['npm install -g aws-cdk','npm install'],
-        synthCommand: 'cdk synth'
+        cloudAssemblyArtifact: cloudAssemblyArtifact
       })
     });
 

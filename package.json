@@ -4,10 +4,9 @@
   "private": true,
   "scripts": {
     "build": "echo \"The build step is not required when using JavaScript!\" && exit 0",
-    "cdk": "cdk",
     "test": "jest"
   },
-  "devDependencies": {
+  "dependencies": {
     "@aws-cdk/assert": "1.109.0",
     "@aws-cdk/aws-apigateway": "^1.109.0",
     "@aws-cdk/aws-codedeploy": "^1.109.0",
