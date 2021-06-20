@@ -12,6 +12,7 @@ class PipelineStack extends cdk.Stack {
     const cloudAssemblyArtifact = new codepipeline.Artifact();    
 
     const pipeline = new pipelines.CdkPipeline(this, 'ServerlessWorkerPipeline', {
+      crossAccountKeys: false,
       cloudAssemblyArtifact: cloudAssemblyArtifact,
       pipelineName: 'ServerlessWorkerPipeline',
       sourceAction: new cpactions.GitHubSourceAction({
