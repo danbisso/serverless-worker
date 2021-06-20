@@ -26,7 +26,7 @@ class PipelineStack extends cdk.Stack {
       synthAction: new pipelines.SimpleSynthAction({
         sourceArtifact: sourceArtifact,
         cloudAssemblyArtifact: cloudAssemblyArtifact,
-        installCommands: ['npm install -g aws-cdk && npm install'],
+        installCommands: ['npm install -g aws-cdk','npm install'],
         synthCommand: 'cdk synth'
       })
     });
