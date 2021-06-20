@@ -1,10 +1,12 @@
-#!/usr/bin/env node
-
 const cdk = require('@aws-cdk/core');
-const { PipelinesStack } = require('../lib/pipelines-stack');
+const ApplicationStack = require('./applicationStack');
+const PipelineStack = require('./pipelineStack');
 
 const app = new cdk.App();
-new PipelinesStack(app, 'PipelinesStack', {
+
+new ApplicationStack(app, 'ApplicationStack');
+
+new PipelineStack(app, 'PipelineStack', {
   /* If you don't specify 'env', this stack will be environment-agnostic.
    * Account/Region-dependent features and context lookups will not work,
    * but a single synthesized template can be deployed anywhere. */
@@ -15,7 +17,10 @@ new PipelinesStack(app, 'PipelinesStack', {
 
   /* Uncomment the next line if you know exactly what Account and Region you
    * want to deploy the stack to. */
-  // env: { account: '123456789012', region: 'us-east-1' },
+  env: { 
+    account: '812643611113', 
+    region: 'us-east-1' 
+  },
 
   /* For more information, see https://docs.aws.amazon.com/cdk/latest/guide/environments.html */
 });

@@ -1,8 +1,9 @@
 {
-  "app": "node bin/pipelines.js",
+  "app": "node cdk/app.js",
   "context": {
     "@aws-cdk/aws-apigateway:usagePlanKeyOrderInsensitiveId": true,
     "@aws-cdk/core:enableStackNameDuplicates": "true",
+    "@aws-cdk/core:newStyleStackSynthesis": "true",
     "aws-cdk:enableDiffNoFail": "true",
     "@aws-cdk/core:stackRelativeExports": "true",
     "@aws-cdk/aws-ecr-assets:dockerIgnoreSupport": true,

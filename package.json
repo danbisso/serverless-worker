@@ -1,9 +1,7 @@
 {
-  "name": "pipelines",
+  "name": "serverless-worker",
   "version": "0.1.0",
-  "bin": {
-    "pipelines": "bin/pipelines.js"
-  },
+  "private": true,
   "scripts": {
     "build": "echo \"The build step is not required when using JavaScript!\" && exit 0",
     "cdk": "cdk",
@@ -11,10 +9,14 @@
   },
   "devDependencies": {
     "@aws-cdk/assert": "1.109.0",
+    "@aws-cdk/aws-apigateway": "^1.109.0",
+    "@aws-cdk/aws-codedeploy": "^1.109.0",
+    "@aws-cdk/aws-codepipeline": "^1.109.0",
+    "@aws-cdk/aws-codepipeline-actions": "^1.109.0",
+    "@aws-cdk/aws-lambda": "^1.109.0",
+    "@aws-cdk/core": "^1.109.0",
+    "@aws-cdk/pipelines": "^1.109.0",
     "aws-cdk": "1.109.0",
     "jest": "^26.4.2"
-  },
-  "dependencies": {
-    "@aws-cdk/core": "1.109.0"
   }
 }
