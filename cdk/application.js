@@ -14,11 +14,11 @@ class ApplicationStack extends cdk.Stack {
       code: lambda.Code.fromAsset('lambda')
     });
 
-    const api = new apigw.LambdaRestApi(this, 'API', {
-      restApiName: `${scope.stageName}-Worker`,
-      description: 'Web service endpoint to execute some work',
-      handler: handler
-    });
+    // const api = new apigw.LambdaRestApi(this, 'API', {
+    //   restApiName: `${scope.stageName}-Worker`,
+    //   description: 'Web service endpoint to execute some work',
+    //   handler: handler
+    // });
 
     this.ApiGatewayUrl = new cdk.CfnOutput(this, 'APIGatewayURL', {
       description: 'API Gateway-generated endpoint URL',
