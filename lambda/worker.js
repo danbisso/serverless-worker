@@ -2,8 +2,8 @@
 // Event handler.
 module.exports.handler = async (event, context) => {
     return {
-        statusCode: 400,
-        body: 'Hello World!'
+        statusCode: 200,
+        body: 'Hello World! Updated'
     }
 };
 
