@@ -27,4 +27,4 @@ class ApplicationStack extends cdk.Stack {
   }
 }
 
-module.exports = ApplicationStack;
+module.exports = { ApplicationStack };

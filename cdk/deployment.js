@@ -2,6 +2,7 @@ const cdk = require('@aws-cdk/core');
 const codepipeline = require('@aws-cdk/aws-codepipeline');
 const cpactions = require('@aws-cdk/aws-codepipeline-actions');
 const pipelines = require('@aws-cdk/pipelines');
+const { ApplicationStack } = require('./application');
 
 class PipelineStack extends cdk.Stack {
 
@@ -29,7 +30,17 @@ class PipelineStack extends cdk.Stack {
       })
     });
 
+    const prodStage = new ApplicationStage(this, 'Prod');
+    pipeline.addApplicationStage(prodStage);
   }
 }
 
-module.exports = PipelineStack;
+class ApplicationStage extends cdk.Stage {
+  constructor(scope, id, props) {
+    super(scope, id, props);
+
+    new ApplicationStack(this, 'ApplicationStage');
+  }
+}
+
+module.exports = { PipelineStack };

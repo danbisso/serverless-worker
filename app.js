@@ -1,10 +1,7 @@
 const cdk = require('@aws-cdk/core');
-const ApplicationStack = require('./applicationStack');
-const PipelineStack = require('./pipelineStack');
+const { PipelineStack } = require('./cdk/deployment');
 
 const app = new cdk.App();
-
-new ApplicationStack(app, 'ApplicationStack');
 
 new PipelineStack(app, 'PipelineStack', {
   /* If you don't specify 'env', this stack will be environment-agnostic.
