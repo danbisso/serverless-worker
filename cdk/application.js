@@ -15,6 +15,7 @@ class ApplicationStack extends cdk.Stack {
     });
 
     const api = new apigw.LambdaRestApi(this, 'API', {
+      restApiName: `${scope.stageName}-Worker`,
       description: 'Web service endpoint to execute some work',
       handler: handler
     });
@@ -23,7 +24,6 @@ class ApplicationStack extends cdk.Stack {
       description: 'API Gateway-generated endpoint URL',
       value: api.url
     });
-
   }
 }
 

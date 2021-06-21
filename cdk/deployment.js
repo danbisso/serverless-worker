@@ -26,7 +26,8 @@ class PipelineStack extends cdk.Stack {
       }),
       synthAction: pipelines.SimpleSynthAction.standardNpmSynth({
         sourceArtifact: sourceArtifact,
-        cloudAssemblyArtifact: cloudAssemblyArtifact
+        cloudAssemblyArtifact: cloudAssemblyArtifact,
+        testCommands: ['npm test']
       })
     });
 
