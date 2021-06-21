@@ -30,8 +30,11 @@ class PipelineStack extends cdk.Stack {
       })
     });
 
-    const prodStage = new ApplicationStage(this, 'Prod');
-    pipeline.addApplicationStage(prodStage);
+     
+     const testStage = pipeline.addApplicationStage(new ApplicationStage(this, 'Test'));
+     testStage.addManualApprovalAction();
+    
+     pipeline.addApplicationStage(new ApplicationStage(this, 'Prod'));
   }
 }
 
