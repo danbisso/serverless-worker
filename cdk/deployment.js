@@ -9,8 +9,8 @@ class PipelineStack extends cdk.Stack {
   constructor(scope, id, props) {
     super(scope, id, props);
 
-    const sourceArtifact = new codepipeline.Artifact();    
-    const cloudAssemblyArtifact = new codepipeline.Artifact();    
+    const sourceArtifact = new codepipeline.Artifact();
+    const cloudAssemblyArtifact = new codepipeline.Artifact();
 
     const pipeline = new pipelines.CdkPipeline(this, 'ServerlessWorkerPipeline', {
       crossAccountKeys: false,
@@ -27,15 +27,26 @@ class PipelineStack extends cdk.Stack {
       synthAction: pipelines.SimpleSynthAction.standardNpmSynth({
         sourceArtifact: sourceArtifact,
         cloudAssemblyArtifact: cloudAssemblyArtifact,
-        testCommands: ['npm test']
+        testCommands: ['npm test unit']
       })
     });
 
-     
-     const testStage = pipeline.addApplicationStage(new ApplicationStage(this, 'Test'));
-     testStage.addManualApprovalAction();
-    
-     pipeline.addApplicationStage(new ApplicationStage(this, 'Prod'));
+    const testAppStage = new ApplicationStage(this, 'Test');
+    const testStage = pipeline.addApplicationStage(testAppStage);
+    testStage.addActions(new pipelines.ShellScriptAction({
+      actionName: 'IntegrationTest',
+      runOrder: testStage.nextSequentialRunOrder(),
+      additionalArtifacts: [sourceArtifact],
+      commands: [
+        'npm ci',
+        'npm test integration'
+      ],
+      useOutputs: {
+        ENDPOINT_URL: pipeline.stackOutput(testAppStage.ApiGatewayUrl)
+      }
+    }));
+
+    pipeline.addApplicationStage(new ApplicationStage(this, 'Prod'));
   }
 }
 
@@ -43,7 +54,8 @@ class ApplicationStage extends cdk.Stage {
   constructor(scope, id, props) {
     super(scope, id, props);
 
-    new ApplicationStack(this, 'ApplicationStage');
+    const stack = new ApplicationStack(this, 'ApplicationStage');
+    this.ApiGatewayUrl = stack.ApiGatewayUrl;
   }
 }
 
