@@ -31,20 +31,20 @@ class PipelineStack extends Stack {
       })
     });
 
-    // const testAppStage = new ApplicationStage(this, 'Test');
-    // const testStage = pipeline.addApplicationStage(testAppStage);
-    // testStage.addActions(new ShellScriptAction({
-    //   actionName: 'IntegrationTest',
-    //   runOrder: testStage.nextSequentialRunOrder(),
-    //   additionalArtifacts: [sourceArtifact],
-    //   commands: [
-    //     'npm ci',
-    //     'npm test integration'
-    //   ],
-    //   useOutputs: {
-    //     ENDPOINT_URL: pipeline.stackOutput(testAppStage.ApiGatewayUrl)
-    //   }
-    // }));
+    const testAppStage = new ApplicationStage(this, 'Test');
+    const testStage = pipeline.addApplicationStage(testAppStage);
+    testStage.addActions(new ShellScriptAction({
+      actionName: 'IntegrationTest',
+      runOrder: testStage.nextSequentialRunOrder(),
+      additionalArtifacts: [sourceArtifact],
+      commands: [
+        'npm ci',
+        'npm test integration'
+      ],
+      useOutputs: {
+        ENDPOINT_URL: pipeline.stackOutput(testAppStage.ApiGatewayUrl)
+      }
+    }));
 
     pipeline.addApplicationStage(new ApplicationStage(this, 'Prod'));
   }
