@@ -28,34 +28,23 @@ class PipelineStack extends Stack {
         sourceArtifact: sourceArtifact,
         cloudAssemblyArtifact: cloudAssemblyArtifact,
         testCommands: ['npm test unit']
-        /*
-
-
-        TODO: 
-        TODO: 
-        TODO: doing tests here might prevent pipeline from self-mutating. either thkink carefully about what kind of tests to do here 
-        (like check that the pipeline and prod stages are not touched?), or do all tests after the self-mutate action.  
-
-        Also, what happens if a stage is deleted, are all the resources deleted too??
-
-        */
       })
     });
 
-    const testAppStage = new ApplicationStage(this, 'Test');
-    const testStage = pipeline.addApplicationStage(testAppStage);
-    testStage.addActions(new ShellScriptAction({
-      actionName: 'IntegrationTest',
-      runOrder: testStage.nextSequentialRunOrder(),
-      additionalArtifacts: [sourceArtifact],
-      commands: [
-        'npm ci',
-        'npm test integration'
-      ],
-      useOutputs: {
-        ENDPOINT_URL: pipeline.stackOutput(testAppStage.ApiGatewayUrl)
-      }
-    }));
+    // const testAppStage = new ApplicationStage(this, 'Test');
+    // const testStage = pipeline.addApplicationStage(testAppStage);
+    // testStage.addActions(new ShellScriptAction({
+    //   actionName: 'IntegrationTest',
+    //   runOrder: testStage.nextSequentialRunOrder(),
+    //   additionalArtifacts: [sourceArtifact],
+    //   commands: [
+    //     'npm ci',
+    //     'npm test integration'
+    //   ],
+    //   useOutputs: {
+    //     ENDPOINT_URL: pipeline.stackOutput(testAppStage.ApiGatewayUrl)
+    //   }
+    // }));
 
     pipeline.addApplicationStage(new ApplicationStage(this, 'Prod'));
   }
