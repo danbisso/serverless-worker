@@ -3,9 +3,18 @@
 module.exports.handler = async (event, context) => {
     return {
         statusCode: 200,
-        body: 'Hello World! Updated'
+        body: 'Hello World! Updated to 1.129'
     }
 };
+
+
+// Function without deps: handler 
+// Function with deps: handler + node_modules
+// Functions with shared deps: handlers + Layer with node_modules
+// Functions with deps with compiled dependencies: handler + node_modules + docker bundling
+
+
+// NodeJSFunction bundles which should make the --watch updates fast, and it also has the optional docker bundling for compiled deps. 
 
 
 // NOTE: SNS and SQS have a 256kb payload limit, this is around 50 line items per oder. Unlikely but not impossible. 
