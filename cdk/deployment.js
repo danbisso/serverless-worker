@@ -54,9 +54,9 @@ class ApplicationStage extends Stage {
   constructor(scope, id, props) {
     super(scope, id, props);
 
-    const stack = new ApplicationStack(this, 'ApplicationStage');
+    const stack = new ApplicationStack(this, 'ApplicationStack');
     this.ApiGatewayUrl = stack.ApiGatewayUrl;
   }
 }
 
-module.exports = { PipelineStack };
+module.exports = { PipelineStack, ApplicationStage };

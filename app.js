@@ -1,5 +1,5 @@
 const { App } = require('@aws-cdk/core');
-const { PipelineStack } = require('./cdk/deployment');
+const { PipelineStack, ApplicationStage } = require('./cdk/deployment');
 
 const app = new App();
 
@@ -20,4 +20,11 @@ new PipelineStack(app, 'PipelineStack', {
   },
 
   /* For more information, see https://docs.aws.amazon.com/cdk/latest/guide/environments.html */
+});
+
+new ApplicationStage(app, 'Dev', {
+  env: {
+    account: '812643611113',
+    region: 'us-east-1'
+  },
 });
