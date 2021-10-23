@@ -1,10 +1,8 @@
-const { Stage } = require("@aws-cdk/core");
-
 // Event handler.
 module.exports.handler = async (event, context) => {
     return {
         statusCode: 200,
-        body: 'Hello World! Updated to 1.129'
+        body: 'Hello World! Updated to 1.129 with refactored pipeline'
     }
 };
 
