@@ -1,7 +1,6 @@
 const { Stack, SecretValue, Stage } = require('@aws-cdk/core');
-const { Artifact } = require('@aws-cdk/aws-codepipeline');
-const { GitHubSourceAction, GitHubTrigger } = require('@aws-cdk/aws-codepipeline-actions');
-const { CdkPipeline, SimpleSynthAction, ShellScriptAction } = require('@aws-cdk/pipelines');
+const { GitHubTrigger } = require('@aws-cdk/aws-codepipeline-actions');
+const { CodePipeline, ShellStep, CodePipelineSource } = require('@aws-cdk/pipelines');
 const { ApplicationStack } = require('./application');
 
 class PipelineStack extends Stack {
@@ -9,44 +8,37 @@ class PipelineStack extends Stack {
   constructor(scope, id, props) {
     super(scope, id, props);
 
-    const sourceArtifact = new Artifact();
-    const cloudAssemblyArtifact = new Artifact();
-
-    const pipeline = new CdkPipeline(this, 'ServerlessWorkerPipeline', {
-      crossAccountKeys: false,
-      cloudAssemblyArtifact: cloudAssemblyArtifact,
+    const pipeline = new CodePipeline(this, 'ServerlessWorkerPipeline', {
       pipelineName: 'ServerlessWorkerPipeline',
-      sourceAction: new GitHubSourceAction({
-        actionName: 'Github',
-        output: sourceArtifact,
-        oauthToken: SecretValue.secretsManager('github-danbisso'),
-        owner: 'danbisso',
-        repo: 'serverless-worker',
-        trigger: GitHubTrigger.WEBHOOK
-      }),
-      synthAction: SimpleSynthAction.standardNpmSynth({
-        sourceArtifact: sourceArtifact,
-        cloudAssemblyArtifact: cloudAssemblyArtifact,
-        testCommands: ['npm test unit']
+      synth: new ShellStep('Synth', {
+        input: CodePipelineSource.gitHub('danbisso/serverless-worker', 'master', {
+          authentication: SecretValue.secretsManager('github-danbisso'),
+          trigger: GitHubTrigger.WEBHOOK
+        }),
+        commands: [
+          'npm ci',
+          'npm test unit',
+          'npx cdk synth',
+        ],
       })
     });
 
     const testAppStage = new ApplicationStage(this, 'Test');
-    const testStage = pipeline.addApplicationStage(testAppStage);
-    testStage.addActions(new ShellScriptAction({
-      actionName: 'IntegrationTest',
-      runOrder: testStage.nextSequentialRunOrder(),
-      additionalArtifacts: [sourceArtifact],
-      commands: [
-        'npm ci',
-        'npm test integration'
-      ],
-      useOutputs: {
-        ENDPOINT_URL: pipeline.stackOutput(testAppStage.ApiGatewayUrl)
-      }
-    }));
+    pipeline.addStage(testAppStage, {
+      post: [
+        new ShellStep('IntegrationTest', {
+          commands: [
+            'npm ci',
+            'npm test integration'
+          ],
+          envFromCfnOutputs: {
+            ENDPOINT_URL: testAppStage.ApiGatewayUrl
+          }
+        })
+      ]
+    });
 
-    pipeline.addApplicationStage(new ApplicationStage(this, 'Prod'));
+    pipeline.addStage(new ApplicationStage(this, 'Prod'));
   }
 }
 

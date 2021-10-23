@@ -1,3 +1,4 @@
+const { Stage } = require("@aws-cdk/core");
 
 // Event handler.
 module.exports.handler = async (event, context) => {
@@ -13,6 +14,9 @@ module.exports.handler = async (event, context) => {
 // Functions with shared deps: handlers + Layer with node_modules
 // Functions with deps with compiled dependencies: handler + node_modules + docker bundling
 
+// can we test if api endpoint urls changed? 
+
+// I just did some refactoring of the pipeline code and now I'm scared it'll break the live Stage. Can tests be added for this?
 
 // NodeJSFunction bundles which should make the --watch updates fast, and it also has the optional docker bundling for compiled deps. 
 
