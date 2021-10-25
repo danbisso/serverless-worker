@@ -1,6 +1,6 @@
 const { Stack, SecretValue, Stage } = require('@aws-cdk/core');
 const { GitHubTrigger } = require('@aws-cdk/aws-codepipeline-actions');
-const { CodePipeline, ShellStep, CodePipelineSource } = require('@aws-cdk/pipelines');
+const { CodePipeline, ShellStep, ManualApprovalStep, CodePipelineSource } = require('@aws-cdk/pipelines');
 const { ApplicationStack } = require('./application');
 
 class PipelineStack extends Stack {
@@ -34,11 +34,16 @@ class PipelineStack extends Stack {
           envFromCfnOutputs: {
             ENDPOINT_URL: testAppStage.ApiGatewayUrl
           }
-        })
+        }),
+        new ManualApprovalStep('ManualApproval-1')
       ]
     });
 
-    pipeline.addStage(new ApplicationStage(this, 'Prod'));
+    pipeline.addStage(new ApplicationStage(this, 'Prod'), {
+      pre: [
+        new ManualApprovalStep('ManualApproval-2')
+      ]
+    });
   }
 }
 

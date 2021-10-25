@@ -17,7 +17,10 @@ class ApplicationStack extends Stack {
     const api = new LambdaRestApi(this, 'API', {
       restApiName: `${scope.stageName}-Worker`,
       description: 'Web service endpoint to execute some work',
-      handler: handler
+      handler: handler,
+      deployOptions: {
+        stageName: scope.stageName.toLowerCase()
+      }
     });
 
     this.ApiGatewayUrl = new CfnOutput(this, 'APIGatewayURL', {
