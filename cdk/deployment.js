@@ -35,13 +35,13 @@ class PipelineStack extends Stack {
             ENDPOINT_URL: testAppStage.ApiGatewayUrl
           }
         }),
-        new ManualApprovalStep('ManualApproval-1')
+        // new ManualApprovalStep('ManualApproval')
       ]
     });
 
     pipeline.addStage(new ApplicationStage(this, 'Prod'), {
       pre: [
-        new ManualApprovalStep('ManualApproval-2')
+        new ManualApprovalStep('ManualApproval')
       ]
     });
   }
